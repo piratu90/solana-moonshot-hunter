@@ -1,5 +1,5 @@
 
-import { API_ENDPOINTS, fetchWithErrorHandling } from './api-config';
+import { API_ENDPOINTS, fetchWithErrorHandling, getAuthHeaders } from './api-config';
 
 export interface RugCheckResult {
   token_id: string;
@@ -28,18 +28,22 @@ export async function scanToken(tokenAddress: string): Promise<RugCheckResult> {
   const url = `${API_ENDPOINTS.RUG_CHECK.BASE_URL}${API_ENDPOINTS.RUG_CHECK.SCAN}/${tokenAddress}`;
   
   const options: RequestInit = {
-    headers: {
-      'accept': 'application/json'
-    }
+    headers: getAuthHeaders('RUG_CHECK'),
+    cache: 'no-cache' // Întotdeauna obținem cea mai recentă analiză
   };
   
-  const response = await fetchWithErrorHandling<RugCheckResponse>(url, options);
-  
-  if (!response.success) {
-    throw new Error('RugCheck scan failed');
+  try {
+    const response = await fetchWithErrorHandling<RugCheckResponse>(url, options);
+    
+    if (!response.success) {
+      throw new Error('RugCheck scan failed');
+    }
+    
+    return response.result;
+  } catch (error) {
+    console.error('RugCheck scan error:', error);
+    throw error;
   }
-  
-  return response.result;
 }
 
 export async function reportToken(
@@ -52,8 +56,8 @@ export async function reportToken(
   const options: RequestInit = {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
-      'accept': 'application/json'
+      ...getAuthHeaders('RUG_CHECK'),
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       reporter_address: reporterAddress,
@@ -61,5 +65,10 @@ export async function reportToken(
     })
   };
   
-  return await fetchWithErrorHandling<{success: boolean}>(url, options);
+  try {
+    return await fetchWithErrorHandling<{success: boolean}>(url, options);
+  } catch (error) {
+    console.error('RugCheck report error:', error);
+    throw error;
+  }
 }

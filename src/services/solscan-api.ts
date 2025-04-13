@@ -1,5 +1,5 @@
 
-import { API_ENDPOINTS, fetchWithErrorHandling } from './api-config';
+import { API_ENDPOINTS, fetchWithErrorHandling, getAuthHeaders } from './api-config';
 
 export interface SolscanTokenResponse {
   symbol: string;
@@ -45,34 +45,46 @@ export async function getTokenInfo(tokenAddress: string): Promise<SolscanTokenRe
   const url = `${API_ENDPOINTS.SOLSCAN.BASE_URL}${API_ENDPOINTS.SOLSCAN.TOKEN}/${tokenAddress}`;
   
   const options: RequestInit = {
-    headers: {
-      'accept': 'application/json'
-    }
+    headers: getAuthHeaders('SOLSCAN'),
+    cache: 'no-cache' // Pentru asigurarea unor date actualizate
   };
   
-  return await fetchWithErrorHandling<SolscanTokenResponse>(url, options);
+  try {
+    return await fetchWithErrorHandling<SolscanTokenResponse>(url, options);
+  } catch (error) {
+    console.error('Error fetching token info:', error);
+    throw error;
+  }
 }
 
 export async function getTokenHolders(tokenAddress: string, limit = 10): Promise<SolscanTokenHolderResponse> {
   const url = `${API_ENDPOINTS.SOLSCAN.BASE_URL}${API_ENDPOINTS.SOLSCAN.TOKEN}/holders/${tokenAddress}?limit=${limit}`;
   
   const options: RequestInit = {
-    headers: {
-      'accept': 'application/json'
-    }
+    headers: getAuthHeaders('SOLSCAN'),
+    cache: 'no-cache'
   };
   
-  return await fetchWithErrorHandling<SolscanTokenHolderResponse>(url, options);
+  try {
+    return await fetchWithErrorHandling<SolscanTokenHolderResponse>(url, options);
+  } catch (error) {
+    console.error('Error fetching token holders:', error);
+    throw error;
+  }
 }
 
 export async function getTokenMetadata(tokenAddress: string): Promise<SolscanTokenMetadataResponse> {
   const url = `${API_ENDPOINTS.SOLSCAN.BASE_URL}${API_ENDPOINTS.SOLSCAN.TOKEN}/meta/${tokenAddress}`;
   
   const options: RequestInit = {
-    headers: {
-      'accept': 'application/json'
-    }
+    headers: getAuthHeaders('SOLSCAN'),
+    cache: 'no-cache'
   };
   
-  return await fetchWithErrorHandling<SolscanTokenMetadataResponse>(url, options);
+  try {
+    return await fetchWithErrorHandling<SolscanTokenMetadataResponse>(url, options);
+  } catch (error) {
+    console.error('Error fetching token metadata:', error);
+    throw error;
+  }
 }

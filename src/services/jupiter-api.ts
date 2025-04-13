@@ -47,13 +47,21 @@ export interface JupiterQuoteResponse {
 
 export async function getTokenPrice(tokenMint: string, vsToken = 'USDC'): Promise<number> {
   const url = `${API_ENDPOINTS.JUPITER.BASE_URL}${API_ENDPOINTS.JUPITER.PRICE}?ids=${tokenMint}&vsToken=${vsToken}`;
-  const response = await fetchWithErrorHandling<JupiterPriceResponse>(url);
   
-  if (!response.data[tokenMint]) {
-    throw new Error(`No price data found for token: ${tokenMint}`);
+  try {
+    const response = await fetchWithErrorHandling<JupiterPriceResponse>(url, {
+      cache: 'no-cache' // Asigură că primim prețul curent
+    });
+    
+    if (!response.data[tokenMint]) {
+      throw new Error(`No price data found for token: ${tokenMint}`);
+    }
+    
+    return response.data[tokenMint].price;
+  } catch (error) {
+    console.error('Jupiter price error:', error);
+    throw error;
   }
-  
-  return response.data[tokenMint].price;
 }
 
 export async function getSwapQuote(
@@ -63,5 +71,13 @@ export async function getSwapQuote(
   slippageBps = 50
 ): Promise<JupiterQuoteResponse> {
   const url = `${API_ENDPOINTS.JUPITER.BASE_URL}${API_ENDPOINTS.JUPITER.QUOTE}?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}&slippageBps=${slippageBps}`;
-  return await fetchWithErrorHandling<JupiterQuoteResponse>(url);
+  
+  try {
+    return await fetchWithErrorHandling<JupiterQuoteResponse>(url, {
+      cache: 'no-cache' // Asigură cotația actualizată
+    });
+  } catch (error) {
+    console.error('Jupiter quote error:', error);
+    throw error;
+  }
 }
