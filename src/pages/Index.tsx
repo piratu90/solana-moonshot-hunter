@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
@@ -9,7 +8,7 @@ import { PerformanceChart } from '@/components/dashboard/PerformanceChart';
 import { TradingParameters } from '@/components/dashboard/TradingParameters';
 import { RecentTransactions } from '@/components/dashboard/RecentTransactions';
 import { mockTokens, mockTransactions, mockPerformanceData, defaultTradingSettings } from '@/lib/mock-data';
-import { token } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { Token } from '@/types/tokens';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CircleDollarSignIcon, Wallet, TrendingUpIcon, Activity, ShieldIcon } from 'lucide-react';

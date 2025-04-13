@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { StatusIndicator } from '@/components/dashboard/StatusIndicator';
 import { CircleDollarSignIcon, PanelRightIcon } from 'lucide-react';
+import { WalletButton } from '@/components/wallet/WalletButton';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -38,9 +39,7 @@ export function Header({ onToggleSidebar, className }: HeaderProps) {
           <StatusIndicator status="online" label="Solscan API" />
         </div>
         
-        <Button size="sm" variant="secondary">
-          Connect Wallet
-        </Button>
+        <WalletButton />
       </div>
     </header>
   );
