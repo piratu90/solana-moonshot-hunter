@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { StatusIndicator } from '@/components/dashboard/StatusIndicator';
 import { CircleDollarSignIcon, PanelRightIcon } from 'lucide-react';
 import { WalletButton } from '@/components/wallet/WalletButton';
+import { useApiStatus } from '@/hooks/use-api-status';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -12,6 +13,8 @@ interface HeaderProps {
 }
 
 export function Header({ onToggleSidebar, className }: HeaderProps) {
+  const { apiStatus } = useApiStatus();
+  
   return (
     <header className={cn(
       "h-16 border-b border-border px-4 flex items-center justify-between bg-background z-10",
@@ -34,9 +37,9 @@ export function Header({ onToggleSidebar, className }: HeaderProps) {
       
       <div className="flex items-center gap-4">
         <div className="hidden md:flex items-center gap-3">
-          <StatusIndicator status="online" label="Jupiter API" />
-          <StatusIndicator status="online" label="Dexscreener API" />
-          <StatusIndicator status="online" label="Solscan API" />
+          <StatusIndicator status={apiStatus.jupiter} label="Jupiter API" />
+          <StatusIndicator status={apiStatus.dexScreener} label="Dexscreener API" />
+          <StatusIndicator status={apiStatus.solscan} label="Solscan API" />
         </div>
         
         <WalletButton />

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { CircleDollarSignIcon, LayoutDashboardIcon, Settings2Icon, BarChart3Icon, HistoryIcon, ShieldAlertIcon, SearchIcon } from 'lucide-react';
 import { StatusIndicator } from '@/components/dashboard/StatusIndicator';
+import { useApiStatus } from '@/hooks/use-api-status';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -32,6 +33,8 @@ const NavItem = ({
 };
 
 export function Sidebar({ isOpen, onClose, className }: SidebarProps) {
+  const { apiStatus } = useApiStatus();
+  
   return (
     <>
       {/* Mobile overlay */}
@@ -91,9 +94,10 @@ export function Sidebar({ isOpen, onClose, className }: SidebarProps) {
         <div className="absolute bottom-0 left-0 right-0 p-4">
           <Separator className="mb-4" />
           <div className="space-y-2">
-            <StatusIndicator status="online" label="Jupiter API" />
-            <StatusIndicator status="online" label="Dexscreener API" />
-            <StatusIndicator status="online" label="Solscan API" />
+            <StatusIndicator status={apiStatus.jupiter} label="Jupiter API" />
+            <StatusIndicator status={apiStatus.dexScreener} label="Dexscreener API" />
+            <StatusIndicator status={apiStatus.solscan} label="Solscan API" />
+            <StatusIndicator status={apiStatus.rugCheck} label="RugCheck API" />
           </div>
         </div>
       </aside>
