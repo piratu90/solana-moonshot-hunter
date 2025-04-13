@@ -1,4 +1,3 @@
-
 import { useQuery } from '@tanstack/react-query';
 import { getTokenPrice } from '@/services/jupiter-api';
 import { getTokenPairs } from '@/services/dexscreener-api';
@@ -13,10 +12,12 @@ export function useTokenInfo(tokenAddress: string) {
     queryFn: () => getTokenInfo(tokenAddress),
     enabled: !!tokenAddress,
     retry: 1,
-    onError: (error) => {
-      toast.error('Failed to load token info', {
-        description: error instanceof Error ? error.message : 'Unknown error'
-      });
+    meta: {
+      onError: (error: Error) => {
+        toast.error('Failed to load token info', {
+          description: error instanceof Error ? error.message : 'Unknown error'
+        });
+      }
     }
   });
 }
@@ -27,10 +28,12 @@ export function useTokenPrice(tokenAddress: string) {
     queryFn: () => getTokenPrice(tokenAddress),
     enabled: !!tokenAddress,
     retry: 1,
-    onError: (error) => {
-      toast.error('Failed to load token price', {
-        description: error instanceof Error ? error.message : 'Unknown error'
-      });
+    meta: {
+      onError: (error: Error) => {
+        toast.error('Failed to load token price', {
+          description: error instanceof Error ? error.message : 'Unknown error'
+        });
+      }
     }
   });
 }
@@ -41,10 +44,12 @@ export function useTokenPairs(tokenAddress: string) {
     queryFn: () => getTokenPairs(tokenAddress),
     enabled: !!tokenAddress,
     retry: 1,
-    onError: (error) => {
-      toast.error('Failed to load token pairs', {
-        description: error instanceof Error ? error.message : 'Unknown error'
-      });
+    meta: {
+      onError: (error: Error) => {
+        toast.error('Failed to load token pairs', {
+          description: error instanceof Error ? error.message : 'Unknown error'
+        });
+      }
     }
   });
 }
@@ -55,10 +60,12 @@ export function useTokenHolders(tokenAddress: string) {
     queryFn: () => getTokenHolders(tokenAddress),
     enabled: !!tokenAddress,
     retry: 1,
-    onError: (error) => {
-      toast.error('Failed to load token holders', {
-        description: error instanceof Error ? error.message : 'Unknown error'
-      });
+    meta: {
+      onError: (error: Error) => {
+        toast.error('Failed to load token holders', {
+          description: error instanceof Error ? error.message : 'Unknown error'
+        });
+      }
     }
   });
 }
@@ -69,10 +76,12 @@ export function useRugCheck(tokenAddress: string) {
     queryFn: () => scanToken(tokenAddress),
     enabled: !!tokenAddress,
     retry: 1,
-    onError: (error) => {
-      toast.error('Failed to perform rug check', {
-        description: error instanceof Error ? error.message : 'Unknown error'
-      });
+    meta: {
+      onError: (error: Error) => {
+        toast.error('Failed to perform rug check', {
+          description: error instanceof Error ? error.message : 'Unknown error'
+        });
+      }
     }
   });
 }
